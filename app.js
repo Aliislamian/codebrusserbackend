@@ -11,8 +11,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(bodyParser.urlencoded({ extended: false }));
 const mongoDBUrl = process.env.MONGO_DB;
 const allowedOrigins = [
-  // 'https://65babb734b071d244f4af91a--fascinating-pixie-b4d6a1.netlify.app',
-  // 'https://65babb3113aee625af5447e4--coruscating-mandazi-56b1cb.netlify.app',
   'http://localhost:3000',
   'http://localhost:3001',
   'http://localhost:8000'
