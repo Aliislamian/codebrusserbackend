@@ -6,7 +6,7 @@ var jwt = require('jsonwebtoken');
 const generateToken = (email) => {
     return jwt.sign({ email }, "JWT_SECRET");
   };
-  
+
 
 exports.Postuser = async (req, res) => {
     try {
