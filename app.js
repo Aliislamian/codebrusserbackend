@@ -28,9 +28,21 @@ app.use(cors());
 app.options("*", cors());
 
 const User = require('./routes/user');
+const categries = require('./routes/categries');
+const subcategries = require('./routes/subcategries');
+const products = require('./routes/products');
+const filter = require('./routes/filter');
+const personalinformation = require('./routes/shop/personalinformation');
+const Imagesshop = require('./routes/shop/image');
 
 
 app.use(User);
+app.use(categries);
+app.use(subcategries);
+app.use(products);
+app.use(filter);
+app.use(personalinformation);
+app.use(Imagesshop);
 
   app.get("/", (req, res) => {
     console.log("Testing");

@@ -15,10 +15,7 @@ exports.Postuser = async (req, res) => {
         if (password !== cpassword) {
             return res.status(401).json({ message: 'Password and confirm password do not match' });
           }
-
-         
-
-
+          
           const UserData = new User({
             email : email,
             country : country,

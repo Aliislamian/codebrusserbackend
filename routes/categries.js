@@ -4,9 +4,9 @@ const categriesController = require('../controllers/categries/categries');
 // const upload =require('../middleware/upload');
 
 routes.post('/api/categries',  categriesController.Postcategries);
-// routes.post('/login',  userController.Login);
-// routes.get('/api/user-get', userController.userGet);
-// routes.patch('/services/:id', bannerController.updateservices);
-// routes.delete('/services-delete/:id', bannerController.deleteservices);
+routes.get('/api/get-categries',  categriesController.getcategries);
+routes.get('/api/categries/:id', categriesController.getbyidcategres);
+routes.patch('/api/categries-update/:id', categriesController.updatecategries);
+routes.delete('/categries-delete/:id', categriesController.deletecategries);
 
 module.exports = routes;

@@ -1,49 +1,49 @@
-const Categries = require('../../models/catogries');
+const SubCategries = require('../../models/subcategries');
 
-exports.Postcategries = async (req, res) => {
+exports.Postsubcategries = async (req, res) => {
     try {
-        const title = req.body.title;
+        const { title, categoryId } = req.body; // Assuming you send both title and categoryId in the request body
 
-        const categoriesData = new Categries({
-            title:title,
-        })
+        const subcategoryData = new SubCategries({
+            title: title,
+            category: categoryId // Assuming categoryId is the ID of the corresponding category
+        });
 
-        const newcategoriesData = await categoriesData.save();
+        const newSubcategory = await subcategoryData.save();
 
         res.send({
-            success : true,
-            error : false,
-            message : "Catgries data posted Successfully!!",
-            categories : categoriesData,
-            
-        })
-
+            success: true,
+            error: false,
+            message: "Subcategory data posted successfully!",
+            subcategory: newSubcategory
+        });
     } catch (error) {
         res.send({
-            success : false,
-            error : true,
-            message : "error in uploading card"
-           })
+            success: false,
+            error: true,
+            message: "Error in uploading subcategories."
+        });
     }
 }
 
-exports.getcategries = async (req, res) => {
+
+exports.getsubcategries = async (req, res) => {
     try {
         
-        const categries = await Categries.find()
+        const categries = await SubCategries.find()
 
         if(!categries){
             res.send({
                 success : false,
                 error : true,
-                message : "Categries not get!!"
+                message : "subCategries not get!!"
                })
         }
 
         res.send({
             success : true,
             error : false,
-            message : "Catgries data posted Successfully!!",
+            message : "SubCatgries data posted Successfully!!",
             categories : categries,
             
         })
@@ -58,24 +58,24 @@ exports.getcategries = async (req, res) => {
 }
 
 
-exports.getbyidcategres = async (req, res) => {
+exports.getbyidsubcategres = async (req, res) => {
     try {
         console.log("object");
         const id = req.params.id;
-        const categries = await Categries.findById(id)
+        const categries = await SubCategries.findById(id)
 
         if(!categries){
             res.send({
                 success : false,
                 error : true,
-                message : "Categries not get!!"
+                message : "subCategries not get!!"
                })
         }
 
         res.send({
             success : true,
             error : false,
-            message : "Catgries data posted Successfully!!",
+            message : "subCatgries data posted Successfully!!",
             categories : categries,
             
         })
@@ -89,25 +89,25 @@ exports.getbyidcategres = async (req, res) => {
     }
 }
 
-exports.updatecategries = async (req, res) => {
+exports.updatesubcategries = async (req, res) => {
     try {
         const id = req.params.id;
         const title = req.body.title;
 
-        const updatedCategories = await Categries.findByIdAndUpdate(id, { title: title }, { new: true });
+        const updatedCategories = await SubCategries.findByIdAndUpdate(id, { title: title }, { new: true });
 
         if (!updatedCategories) {
             return res.send({
                 success: false,
                 error: true,
-                message: "Categories not found or could not be updated."
+                message: "subCategories not found or could not be updated."
             });
         }
 
         res.send({
             success: true,
             error: false,
-            message: "Categories updated successfully.",
+            message: "subCategories updated successfully.",
             categories: updatedCategories
         });
     } catch (error) {
@@ -119,31 +119,31 @@ exports.updatecategries = async (req, res) => {
     }
 }
 
-exports.deletecategries = async (req, res) => {
+exports.deletesubcategries = async (req, res) => {
     try {
         const id = req.params.id;
 
-        const deletedCategories = await Categries.findByIdAndDelete(id);
+        const deletedCategories = await SubCategries.findByIdAndDelete(id);
 
         if (!deletedCategories) {
             return res.send({
                 success: false,
                 error: true,
-                message: "Categories not found or could not be deleted."
+                message: "SubCategories not found or could not be deleted."
             });
         }
 
         res.send({
             success: true,
             error: false,
-            message: "Categories deleted successfully.",
+            message: "subCategories deleted successfully.",
             categories: deletedCategories
         });
     } catch (error) {
         res.send({
             success: false,
             error: true,
-            message: "Error in deleting categories."
+            message: "Error in deleting subcategories."
         });
     }
 }
