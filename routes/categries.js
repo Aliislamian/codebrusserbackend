@@ -2,6 +2,7 @@ const express = require('express');
 const routes = express.Router();
 const categriesController = require('../controllers/categries/categries');
 const Categries = require('../models/catogries');
+const Subcategory = require('../models/subcategries');
 const upload = require("../middlewire/upload"); // Corrected middleware import path
 const cloudinary = require('../middlewire/cloudinary'); // Import cloudinary config
 
@@ -25,17 +26,25 @@ routes.post('/api/categries', upload.array('files', 10), async (req, res) => {
         const newProducts = new Categries({
             files: urls,
             title:req.body.title,
+            subcategory: req.body.subcategory
            
         });
   
         // Save the record to the database
         const savedProducts = await newProducts.save();
+
+      const subcategory = await Subcategory.findById(req.body.subcategory);
+
   
         // Send the Cloudinary URLs and saved product data to the client
         res.status(200).json({
             success: true,
             message: "Uploaded!",
             data: savedProducts,
+            data: {
+                category: savedProducts,
+                subcategory: subcategory // Include the subcategory data in the response
+              },
         });
     } catch (error) {
         console.error(error);

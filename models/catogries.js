@@ -8,7 +8,10 @@ const categoriesSchema = new mongoose.Schema({
     files: {
         type: Array   
     },
-
+    subcategory: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'subcategories'
+    }
 })
 
 module.exports = mongoose.model('categories', categoriesSchema);

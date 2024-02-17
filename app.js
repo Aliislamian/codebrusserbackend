@@ -34,8 +34,9 @@ const products = require('./routes/products');
 const filter = require('./routes/filter');
 const personalinformation = require('./routes/shop/personalinformation');
 const search = require('./routes/search');
-// const Imagesshop = require('./routes/shop/image');
-// const Cart = require('./routes/cart');
+const Imagesshop = require('./routes/shop/image');
+const Cart = require('./routes/cart');
+const message = require('./routes/message');
 
 
 app.use(User);
@@ -45,8 +46,9 @@ app.use(products);
 app.use(filter);
 app.use(personalinformation);
 app.use(search);
-// app.use(Imagesshop);
-// app.use(Cart);
+app.use(Imagesshop);
+app.use(Cart);
+app.use(message);
 
   app.get("/", (req, res) => {
     console.log("Testing");
