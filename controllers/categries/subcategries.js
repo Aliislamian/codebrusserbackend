@@ -1,4 +1,5 @@
 const SubCategries = require('../../models/subcategries');
+const Categries = require('../../models/catogries');
 
 exports.Postsubcategries = async (req, res) => {
     try {
@@ -83,6 +84,41 @@ exports.getByCategoryTitle = async (req, res) => {
             success: false,
             error: true,
             message: "Error in retrieving category data!"
+        });
+    }
+};
+
+
+
+exports.getByIdCategory = async (req, res) => {
+    try {
+        const categoryId = req.params.categoryId; // Get the category ID from the request parameters
+
+        // Find subcategories that belong to the specified category ID
+        const subcategories = await SubCategries.find({ category: categoryId });
+
+        // If no subcategories are found, return an error
+        if (!subcategories || subcategories.length === 0) {
+            return res.status(404).json({
+                success: false,
+                error: true,
+                message: "Subcategories not found for the specified category ID!"
+            });
+        }
+
+        // Return the subcategories associated with the specified category ID
+        return res.status(200).json({
+            success: true,
+            error: false,
+            message: "Subcategories retrieved successfully for the specified category ID!",
+            subcategories: subcategories
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            success: false,
+            error: true,
+            message: "Error in retrieving subcategories for the specified category ID!"
         });
     }
 };

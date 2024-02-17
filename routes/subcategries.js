@@ -71,9 +71,57 @@ routes.post('/api/sub-categries', upload.array('files', 10), async (req, res) =>
       });
     }
   });
+
+//   routes.get('/api/subcategories/:id/category', async (req, res) => {
+//     try {
+//         // Get the subcategory ID from request parameters
+//         const subcategoryId = req.params.id;
+
+//         // Find the subcategory by ID
+//         const subcategory = await subcategries.findById(subcategoryId);
+
+//         // If subcategory does not exist, return error
+//         if (!subcategory) {
+//             return res.status(404).json({
+//                 success: false,
+//                 error: true,
+//                 message: "Subcategory not found!"
+//             });
+//         }
+
+//         // Retrieve the category associated with the subcategory
+//         const category = await categories.findById(subcategory.category);
+
+//         // If category does not exist, return error
+//         if (!category) {
+//             return res.status(404).json({
+//                 success: false,
+//                 error: true,
+//                 message: "Category not found for the subcategory!"
+//             });
+//         }
+
+//         // Send the category data associated with the subcategory in the response
+//         res.status(200).json({
+//             success: true,
+//             error: false,
+//             message: "Category data retrieved successfully for the subcategory!",
+//             category: category
+//         });
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).json({
+//             success: false,
+//             error: true,
+//             message: "Error in retrieving category data for the subcategory!"
+//         });
+//     }
+// });
+
 // routes.post('/api/sub-categries',  SubcategriesController.Postsubcategries);
 // routes.get('/api/get-subcategries',  SubcategriesController.getsubcategries);
 routes.get('/api/sub-categries/:title', SubcategriesController.getByCategoryTitle);
+routes.get('/api/sub-categries-id/:categoryId', SubcategriesController.getByIdCategory);
 routes.patch('/api/sub-categries-update/:id', SubcategriesController.updatesubcategries);
 routes.delete('/api/sub-categries-delete/:id', SubcategriesController.deletesubcategries);
 
