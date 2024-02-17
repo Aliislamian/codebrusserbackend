@@ -58,36 +58,34 @@ exports.getsubcategries = async (req, res) => {
 }
 
 
-exports.getbyidsubcategres = async (req, res) => {
+exports.getByCategoryTitle = async (req, res) => {
     try {
-        console.log("object");
-        const id = req.params.id;
-        const categries = await SubCategries.findById(id)
-
-        if(!categries){
-            res.send({
-                success : false,
-                error : true,
-                message : "subCategries not get!!"
-               })
+        const title = req.params.title; // Get the category title from the request parameters
+        const category = await SubCategries.findOne({ title }); // Find the category by title
+        
+        if (!category) {
+            return res.status(404).json({
+                success: false,
+                error: true,
+                message: "Category not found!"
+            });
         }
 
-        res.send({
-            success : true,
-            error : false,
-            message : "subCatgries data posted Successfully!!",
-            categories : categries,
-            
-        })
-
+        return res.status(200).json({
+            success: true,
+            error: false,
+            message: "Category data retrieved successfully!",
+            category: category
+        });
     } catch (error) {
-        res.send({
-            success : false,
-            error : true,
-            message : "error in categrey get!!"
-           })
+        console.error(error);
+        return res.status(500).json({
+            success: false,
+            error: true,
+            message: "Error in retrieving category data!"
+        });
     }
-}
+};
 
 exports.updatesubcategries = async (req, res) => {
     try {
