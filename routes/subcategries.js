@@ -73,7 +73,7 @@ routes.post('/api/sub-categries', upload.array('files', 10), async (req, res) =>
   });
 // routes.post('/api/sub-categries',  SubcategriesController.Postsubcategries);
 // routes.get('/api/get-subcategries',  SubcategriesController.getsubcategries);
-// routes.get('/api/sub-categries/:id', SubcategriesController.getbyidsubcategres);
+routes.get('/api/sub-categries/:id', SubcategriesController.getbyidsubcategres);
 routes.patch('/api/sub-categries-update/:id', SubcategriesController.updatesubcategries);
 routes.delete('/api/sub-categries-delete/:id', SubcategriesController.deletesubcategries);
 

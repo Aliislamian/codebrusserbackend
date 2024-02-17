@@ -63,7 +63,7 @@ routes.post('/api/categries', upload.array('files', 10), async (req, res) => {
     }
   });
 // routes.get('/api/get-categries',  categriesController.getcategries);
-// routes.get('/api/categries/:id', categriesController.getbyidcategres);
+routes.get('/api/categries/:id', categriesController.getbyidcategres);
 routes.patch('/api/categries-update/:id', categriesController.updatecategries);
 routes.delete('/api/categries-delete/:id', categriesController.deletecategries);
 
