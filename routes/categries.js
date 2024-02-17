@@ -1,6 +1,6 @@
 const express = require('express');
 const routes = express.Router();
-// const categriesController = require('../controllers/categries/categries');
+const categriesController = require('../controllers/categries/categries');
 const Categries = require('../models/catogries');
 const upload = require("../middlewire/upload"); // Corrected middleware import path
 const cloudinary = require('../middlewire/cloudinary'); // Import cloudinary config
@@ -64,7 +64,7 @@ routes.post('/api/categries', upload.array('files', 10), async (req, res) => {
   });
 // routes.get('/api/get-categries',  categriesController.getcategries);
 // routes.get('/api/categries/:id', categriesController.getbyidcategres);
-// routes.patch('/api/categries-update/:id', categriesController.updatecategries);
-// routes.delete('/categries-delete/:id', categriesController.deletecategries);
+routes.patch('/api/categries-update/:id', categriesController.updatecategries);
+routes.delete('/api/categries-delete/:id', categriesController.deletecategries);
 
 module.exports = routes;
