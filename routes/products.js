@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const upload = require("../middlewire/upload");
-const cloudinary = require('cloudinary').v2;
+const upload = require("../middlewire/upload"); // Corrected middleware import path
+const cloudinary = require('../middlewire/cloudinary'); // Import cloudinary config
 const Products = require('../models/products');
+const Subcategories = require('../models/subcategries')
 
 cloudinary.config({
   cloud_name: 'dyferab2s',
@@ -11,43 +12,55 @@ cloudinary.config({
   secure: true
 });
 
-router.post('/api/product', upload.single('image'), async (req, res) => {
+router.post('/api/product', upload.array('files', 10), async (req, res) => {
   try {
-    // Upload image to Cloudinary
-    const result = await cloudinary.uploader.upload(req.file.path);
+      // Upload images to Cloudinary
+      const uploader = async (path) => await cloudinary.uploader.upload(path, { folder: "Images" });
 
-    // Create a record in the database with the Cloudinary URL, title, and description
-    const newProducts = new Products({
-      url: result.secure_url,
-      title: req.body.title,
-      heading: req.body.heading,
-      description: req.body.description,
-      detials: req.body.detials,
-      color: req.body.color,
-      size: req.body.size,
-      price: req.body.price,
-      Properties: req.body.Properties,
-      subcategory: req.body.subcategory,
-    });
+      const urls = [];
+      const files = req.files; 
+      for (const file of files) {
+          const { path } = file;
+          const newPath = await uploader(path);
+          urls.push(newPath.secure_url); // Push the secure URL to the array
+      }
 
-    // Save the record to the database
-    const savedProducts = await newProducts.save();
+      // Create a record in the database with the Cloudinary URLs, title, and other data
+      const newProducts = new Products({
+          files: urls,
+          title: req.body.title,
+          heading: req.body.heading,
+          description: req.body.description,
+          detials: req.body.detials,
+          color: req.body.color,
+          size: req.body.size,
+          price: req.body.price,
+          Properties: req.body.Properties,
+          subcategory: req.body.subcategory,
+      });
 
-    // Send the Cloudinary URL and savedAbout to the client
-    res.status(200).json({
-      success: true,
-      message: "Uploaded!",
-      data: savedProducts,
-    });
+      // Save the record to the database
+      const savedProducts = await newProducts.save();
+
+      const subcategory = await Subcategories.findById(req.body.subcategory);
+
+      // Send the Cloudinary URLs and saved product data to the client
+      res.status(200).json({
+          success: true,
+          message: "Uploaded!",
+          data: {
+            product: savedProducts,
+            subcategory: subcategory // Include the subcategory data in the response
+          },
+      });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({
-      success: false,
-      message: "Error",
-    });
+      console.error(error);
+      res.status(500).json({
+          success: false,
+          message: "Error",
+      });
   }
 });
-
 
 
 

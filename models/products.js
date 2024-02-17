@@ -1,9 +1,8 @@
 const mongoose = require('mongoose');
 
 const subcategoriesSchema = new mongoose.Schema({
-    url: {
-        type: String, // Define urls as an array of strings
-        required: true // Ensure at least one URL is provided
+    files: {
+        type: Array   
     },
     title:{
         type: String,
