@@ -11,8 +11,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(bodyParser.urlencoded({ extended: false }));
 const mongoDBUrl = process.env.MONGO_DB;
 const allowedOrigins = [
-  'http://localhost:3000',
-  'http://localhost:3001',
+  'https://codebrosserwebfrontend.onrender.com',
+  // 'http://localhost:3000',
+  // 'http://localhost:3001',
   'http://localhost:8000'
 ];
 app.use(
