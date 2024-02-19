@@ -19,7 +19,7 @@ cloudinary.config({
   secure: true
 });
 
-router.post('/api/cart', authJwt.verifyToken, upload.single('image'), async (req, res) => {
+router.post('/api/add-cart', authJwt.verifyToken, upload.single('image'), async (req, res) => {
   try {
     // Assuming req.body contains the product_id
     const { product_id } = req.body;
