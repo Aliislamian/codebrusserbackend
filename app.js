@@ -13,7 +13,7 @@ const mongoDBUrl = process.env.MONGO_DB;
 const allowedOrigins = [
   // 'https://codebrosserwebfrontend.onrender.com',
   'http://localhost:3000',
-  // 'http://localhost:3001',
+  'http://localhost:3001',
   'http://localhost:8000'
 ];
 app.use(

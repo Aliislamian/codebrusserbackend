@@ -139,6 +139,35 @@ exports.Postuser = async (req, res) => {
     }
 };
 
+
+exports.login = async (req, res) => {
+  try {
+      const { email, password } = req.body;
+
+      // Find user by email
+      const user = await User.findOne({ email });
+
+      // Check if user exists
+      if (!user) {
+          return res.status(404).json({ message: 'User not found' });
+      }
+
+      // Verify password
+      const isPasswordValid = await bcrypt.compare(password, user.password);
+      if (!isPasswordValid) {
+          return res.status(401).json({ message: 'Invalid credentials' });
+      }
+
+      // If credentials are valid, generate JWT token
+      var token = generateToken(email);
+
+      res.status(200).json({ success: true, message: "Logged in successfully", user: user, token });
+  } catch (error) {
+      console.error('Login error:', error);
+      res.status(500).json({ success: false, message: 'Internal server error' });
+  }
+};
+
 exports.userGet = async (req, res) => {
     try {
       const users = await User.find();
@@ -209,8 +238,9 @@ exports.forgotPasswordPost = async (req, res) => {
   }
 };
 
+
 exports.verifyOTPAndResetPassword = async (req, res) => {
-  try {
+    try {
     const { otp } = req.body;
 
     // Find the user by email
