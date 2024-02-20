@@ -7,7 +7,7 @@ const Product = require('../models/products');
 const userinformation = require('../models/userinformation');
 const shipping = require('../models/shipping');
 const authJwt = require("../middlewire/auth"); // Import the authJwt middleware
-// const stripe = require('stripe')('sk_test_51NETQVLRDc0a3gYhJlQUGW6FdHssqkLq6mp9XgCUrlVc7JBEHwPgivVk87KUPdX30AS6JDACZN751dtl1LhxGT6600VQ3eE9mX');
+const stripe = require('stripe')('sk_test_51NETQVLRDc0a3gYhJlQUGW6FdHssqkLq6mp9XgCUrlVc7JBEHwPgivVk87KUPdX30AS6JDACZN751dtl1LhxGT6600VQ3eE9mX');
 
 
 
@@ -191,76 +191,83 @@ router.get('/api/shipping-get/:id',  async (req, res) => {
   }
 });
 
-// router.post('/checkout', authJwt.verifyToken, async (req, res) => {
-//   try {
-
-//     const customer = await stripe.customers.create({
-//       name:req.body.name,
-//         email:req.body.email, 
-//     });
-//     const customerId = customer.id;
-//     console.log("=====>>>", customerId);
-//     const {
-//       card_Name,
-//       card_ExpYear,
-//       card_ExpMonth,
-//       card_Number,
-//       card_CVC,
-//     } = req.body;
-
-//     const card_token = await stripe.tokens.create({
-//       card: {
-//         name: card_Name,
-//         number: card_Number,
-//         exp_year: card_ExpYear,
-//         exp_month: card_ExpMonth,
-//         cvc: card_CVC,
-//       },
-//     });
-//     console.log("card_token", card_token);
 
 
-//     const card = await stripe.customers.createSource(customerId, {
-//       source: `${card_token.id}`,
-//     });
 
-//     console.log(card_token);
+
+router.post('/api/checkout', authJwt.verifyToken, async (req, res) => {
+  try {
+
+    const customer = await stripe.customers.create({
+        email:req.body.email, 
+    });
+    const customerId = customer.id;
+    console.log("=====>>>", customerId);
+    const {
+      card_Name,
+      card_ExpYear,
+      card_ExpMonth,
+      card_Number,
+      card_CVC,
+    } = req.body;
+
+    const card_token = await stripe.tokens.create({
+      card: {
+        name: card_Name,
+        number: card_Number,
+        exp_year: card_ExpYear,
+        exp_month: card_ExpMonth,
+        cvc: card_CVC,
+      },
+    });
+    console.log("card_token", card_token);
+
+
+    const card = await stripe.customers.createSource(customerId, {
+      source: `${card_token.id}`,
+    });
+
+    console.log(card_token);
    
-//     const cardId = card.id
+    const cardId = card.id
 
 
-//     const createCharge = await stripe.charges.create({
-//       receipt_email: 'tester@gmail.com',
-//       amount: parseInt(req.body.amount) * 100, // amount*100
-//       currency: 'usd',
-//       card: cardId,
-//       customer: customerId,
-//     });
+    const createCharge = await stripe.charges.create({
+      receipt_email: 'tester@gmail.com',
+      amount: parseInt(req.body.amount) * 100, // amount*100
+      currency: 'usd',
+      card: cardId,
+      customer: customerId,
+    });
 
-//     // // Save the amount to MongoDB
-//     // const newCharge = new customers({
-//     //   amount: req.body.amount,
-//     // });
-//     const _id = createCharge.id;
-//       console.log(_id);
-//       const updatedCart = await Cart.findOneAndUpdate(
-//         { userId: req.user_id },
-//         { order_status: 'pending' },
-//         { new: true } // To get the updated cart object
-//       );
+    // // Save the amount to MongoDB
+    // const newCharge = new customers({
+    //   amount: req.body.amount,
+    // });
+    const _id = createCharge.id;
+      console.log(_id);
+      const updatedCart = await Cart.findOneAndUpdate(
+        { userId: req.user_id },
+        { order_status: 'pending' },
+        { new: true } // To get the updated cart object
+      );
   
-//       if (!updatedCart) {
-//         return res.status(404).json({
-//           success: false,
-//           message: "Cart not found",
-//         });
-//       }
-//     res.status(200).send({ card:card_token });
+      if (!updatedCart) {
+        return res.status(404).json({
+          success: false,
+          message: "Cart not found",
+        });
+      }
+    res.status(200).send({ card:card_token });
 
-// } catch (error) {
-//     res.status(400).send({success:false,_id:null});
-// }
-// });
+} catch (error) {
+    res.status(400).send({success:false,_id:null});
+}
+});
+
+
+
+
 
 router.get('/api/get-subtotal', authJwt.verifyToken, async (req, res) => {
     try {
@@ -342,24 +349,31 @@ router.get('/api/get-subtotal', authJwt.verifyToken, async (req, res) => {
   
   router.get('/api/get-cart', authJwt.verifyToken, async (req, res) => {
     try {
-      const userId = req.user_id;
-  
-      // Find all cart items associated with the user
-      const cartItems = await Cart.find({ userId }).populate('product_id');
-  
-      res.status(200).json({
-        success: true,
-        message: "Fetched data successfully",
-        data: cartItems,
-      });
+        const userId = req.user_id;
+
+        // Find all cart items associated with the user
+        const cartItems = await Cart.find({ userId }).populate('product_id');
+
+        // Calculate the total by summing up the subtotals of all items
+        const total = cartItems.reduce((acc, cartItem) => acc + cartItem.subtotal, 0);
+
+        res.status(200).json({
+            success: true,
+            message: "Fetched data successfully",
+            data: {
+                cartItems,
+                total // Include the total in the response
+            }
+        });
     } catch (error) {
-      console.error(error);
-      res.status(500).json({
-        success: false,
-        message: "Error",
-      });
+        console.error(error);
+        res.status(500).json({
+            success: false,
+            message: "Error",
+        });
     }
-  });
+});
+
 
   router.delete('/api/delete-item/:id', authJwt.verifyToken, async (req, res) => {
     try {
