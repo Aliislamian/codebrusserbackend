@@ -5,6 +5,10 @@ const shopinformationSchema = new mongoose.Schema({
         type: String, // Define urls as an array of strings
        
     },
+    files: {
+        type: Array, // Define urls as an array of strings
+       
+    },
     companyname:{
         type: String,
     },
