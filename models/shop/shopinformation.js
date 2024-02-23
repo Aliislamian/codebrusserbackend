@@ -10,6 +10,7 @@ const shopinformationSchema = new mongoose.Schema({
        
     },
     companyname:{
+        
         type: String,
     },
     categries:{
