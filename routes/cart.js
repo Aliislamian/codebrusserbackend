@@ -234,7 +234,7 @@ router.post('/api/checkout', authJwt.verifyToken, async (req, res) => {
 
     const createCharge = await stripe.charges.create({
       receipt_email: 'tester@gmail.com',
-      amount: parseInt(req.body.amount) * 100, // amount*100
+      amount: (req.body.amount) * 100, // amount*100
       currency: 'usd',
       card: cardId,
       customer: customerId,
