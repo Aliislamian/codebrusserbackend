@@ -38,6 +38,7 @@ const search = require('./routes/search');
 const Imagesshop = require('./routes/shop/image');
 const Cart = require('./routes/cart');
 const message = require('./routes/message');
+const Review = require('./routes/review');
 
 
 app.use(User);
@@ -50,6 +51,7 @@ app.use(search);
 app.use(Imagesshop);
 app.use(Cart);
 app.use(message);
+app.use(Review);
 
   app.get("/", (req, res) => {
     console.log("Testing");
