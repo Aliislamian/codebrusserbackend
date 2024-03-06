@@ -20,11 +20,7 @@ const UserSchema = new mongoose.Schema({
     phoneno : {
         type : String,
     },
-    gender:{
-        type: String,
-        enum: ['male', 'female', 'others'],
-        default: 'pending',
-    },
+    
     dob : {
         type : String,
     },

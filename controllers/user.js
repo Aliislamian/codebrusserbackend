@@ -106,14 +106,14 @@ exports.Postuser = async (req, res) => {
           }
           
           const UserData = new User({
-            email : email,
-            country : country,
-            fname : fname,
-            lname : lname,
-            address : address,
-            phoneno : phoneno,
-            gender : gender,
-            dob : dob,
+            email : email || "",
+            country : country || "",
+            fname : fname || "",
+            lname : lname || "",
+            address : address || "",
+            phoneno : phoneno || "",
+            gender : gender || "",
+            dob : dob || "",
             password: bcrypt.hashSync(password, 10),
             cpassword: bcrypt.hashSync(cpassword, 10),
         });
