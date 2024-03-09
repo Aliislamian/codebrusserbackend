@@ -5,9 +5,9 @@ const cloudinary = require('cloudinary').v2;
 const Image = require('../../models/shop/image');
 
 cloudinary.config({
-  cloud_name: 'dyferab2s',
-  api_key: '953374558833214',
-  api_secret: 'dsWhHAMdlwsZeXGMHyhZcUgc6M4',
+  cloud_name: 'dob8jz2lg',
+  api_key: '775856616847855',
+  api_secret: '7gjsf51FHGhdx2YgALD5MBGiX1c',
   secure: true
 });
 

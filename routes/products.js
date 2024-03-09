@@ -6,9 +6,9 @@ const Products = require('../models/products');
 const Subcategories = require('../models/subcategries')
 
 cloudinary.config({
-  cloud_name: 'dyferab2s',
-  api_key: '953374558833214',
-  api_secret: 'dsWhHAMdlwsZeXGMHyhZcUgc6M4',
+  cloud_name: 'dob8jz2lg',
+  api_key: '775856616847855',
+  api_secret: '7gjsf51FHGhdx2YgALD5MBGiX1c',
   secure: true
 });
 
