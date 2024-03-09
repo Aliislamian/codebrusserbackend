@@ -3,24 +3,26 @@ const jwt = require("jsonwebtoken");
 const config = process.env;
 
 verifyToken = (req, res, next) => {
-    let token = extractToken(req);
-  
-    if (!token) {
+  let token = extractToken(req);
+
+  if (!token) {
+    return res.send({
+    success: false, error: "No token provided!", body: null 
+    });
+  }
+
+  jwt.verify(token, 'JWT_SECRET', (err, decoded) => {
+    if (err) {
       return res.send({
-      success: false, error: "No token provided!",body: null 
+        success:false, error: "Unauthorized!", body: null
       });
     }
-  
-    jwt.verify(token, 'JWT_SECRET', (err, decoded) => {
-      if (err) {
-        return res.send({
-          success:false,error: "Unauthorized!",body: null
-        });
-      }
-      req.user_id = decoded.id;
-      next();
-    });
-  };
+    console.log(decoded); // Log the decoded token
+    req.user_id = decoded.id;
+    next();
+  });
+};
+
 
 function extractToken(req) {
     if (

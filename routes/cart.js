@@ -350,6 +350,7 @@ router.get('/api/get-subtotal', authJwt.verifyToken, async (req, res) => {
   router.get('/api/get-cart', authJwt.verifyToken, async (req, res) => {
     try {
         const userId = req.user_id;
+        console.log(userId);
 
         // Find all cart items associated with the user
         const cartItems = await Cart.find({ userId }).populate('product_id');

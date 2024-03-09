@@ -92,9 +92,7 @@ const sendOTPForgotPassoword = async (email) => {
 };
 
 
-const generateToken = (email) => {
-    return jwt.sign({ email }, "JWT_SECRET");
-  };
+
 
 
 exports.Postuser = async (req, res) => {
@@ -118,10 +116,14 @@ exports.Postuser = async (req, res) => {
             cpassword: bcrypt.hashSync(cpassword, 10),
         });
 
+        let token = jwt.sign({ id: UserData._id }, "JWT_SECRET", {
+          expiresIn: 86400, // 24 hours
+        });
         console.log(UserData)
         const newUserData = await UserData.save();
 
-        var token = generateToken(email);
+
+
 
         res.send({
             success : true,
@@ -159,7 +161,10 @@ exports.login = async (req, res) => {
       }
 
       // If credentials are valid, generate JWT token
-      var token = generateToken(email);
+      let token = jwt.sign({ id: user._id }, "JWT_SECRET", {
+        expiresIn: 86400, // 24 hours
+      });
+
 
       res.status(200).json({ success: true, message: "Logged in successfully", user: user, token });
   } catch (error) {
