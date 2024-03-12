@@ -5,6 +5,8 @@ const userController = require('../controllers/user');
 
 routes.post('/api/user',  userController.Postuser);
 routes.post('/api/login',  userController.login);
+routes.post('/api/login-admin',  userController.loginadmin);
+routes.post('/api/login-vendor',  userController.loginvendor);
 routes.post('/api/forgotpassword',  userController.forgotPasswordPost);
 routes.post('/api/verify-otp',  userController.verifyOTPAndResetPassword);
 routes.post('/api/reset-password',  userController.ResetPassword);

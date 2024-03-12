@@ -91,10 +91,6 @@ const sendOTPForgotPassoword = async (email) => {
   }
 };
 
-
-
-
-
 exports.Postuser = async (req, res) => {
     try {
         const {email, country, fname, lname, address, phoneno, gender, dob, password, cpassword} = req.body;
@@ -167,6 +163,66 @@ exports.login = async (req, res) => {
 
 
       res.status(200).json({ success: true, message: "Logged in successfully", user: user, token });
+  } catch (error) {
+      console.error('Login error:', error);
+      res.status(500).json({ success: false, message: 'Internal server error' });
+  }
+};
+exports.loginadmin = async (req, res) => {
+  try {
+    const emails = "codebrusser@gmail.com";
+    const passwords = "codebrusser123"
+      // Find user by email
+      const { email, password } = req.body;
+   
+
+      // Check if user exists
+      if (email == emails && password == passwords) {
+        let token = jwt.sign({ email: email }, "JWT_SECRET", {
+          expiresIn: 86400, // 24 hours
+        });
+
+      res.status(200).json({ success: true, message: "Logged in successfully", user: email, token });
+
+      }
+
+      // Verify password
+     
+
+      // If credentials are valid, generate JWT token
+     
+
+
+  } catch (error) {
+      console.error('Login error:', error);
+      res.status(500).json({ success: false, message: 'Internal server error' });
+  }
+};
+exports.loginvendor = async (req, res) => {
+  try {
+    const emails = "codebrusservendor@gmail.com";
+    const passwords = "codebrusservendor123"
+      // Find user by email
+      const { email, password } = req.body;
+   
+
+      // Check if user exists
+      if (email == emails && password == passwords) {
+        let token = jwt.sign({ email: email }, "JWT_SECRET", {
+          expiresIn: 86400, // 24 hours
+        });
+
+      res.status(200).json({ success: true, message: "Logged in successfully", user: email, token });
+
+      }
+
+      // Verify password
+     
+
+      // If credentials are valid, generate JWT token
+     
+
+
   } catch (error) {
       console.error('Login error:', error);
       res.status(500).json({ success: false, message: 'Internal server error' });
