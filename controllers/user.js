@@ -176,7 +176,8 @@ exports.login = async (req, res) => {
 exports.userGet = async (req, res) => {
     try {
       const users = await User.find();
-      res.status(200).json({ users });
+       const userCount = users.length; // Get the count of users
+    res.status(200).json({ userCount, users }); // Send the user count along with the users
     } catch (error) {
       console.log(error);
       res.status(500).json({ message: 'Error retrieving contacts' });
@@ -242,7 +243,6 @@ exports.forgotPasswordPost = async (req, res) => {
     res.status(500).json({success:false, message: 'Error sending OTP for password reset', body:null});
   }
 };
-
 
 exports.verifyOTPAndResetPassword = async (req, res) => {
     try {

@@ -8,7 +8,7 @@ const userinformation = require('../models/userinformation');
 const shipping = require('../models/shipping');
 const authJwt = require("../middlewire/auth"); // Import the authJwt middleware
 const stripe = require('stripe')('sk_test_51NETQVLRDc0a3gYhJlQUGW6FdHssqkLq6mp9XgCUrlVc7JBEHwPgivVk87KUPdX30AS6JDACZN751dtl1LhxGT6600VQ3eE9mX');
-
+const moment = require('moment');
 
 
 
@@ -62,7 +62,6 @@ router.post('/api/add-cart', authJwt.verifyToken, upload.single('image'), async 
     });
   }
 });
-
 
 router.post('/api/userinformation', authJwt.verifyToken, async (req, res) => {
   try {
@@ -191,10 +190,6 @@ router.get('/api/shipping-get/:id',  async (req, res) => {
   }
 });
 
-
-
-
-
 router.post('/api/checkout', authJwt.verifyToken, async (req, res) => {
   try {
 
@@ -265,9 +260,49 @@ router.post('/api/checkout', authJwt.verifyToken, async (req, res) => {
 }
 });
 
+router.get('/api/orders', async (req, res) => {
+  try {
+    // Find all carts with order_status set to 'pending' for the logged-in user
+    const pendingOrders = await Cart.find({ order_status: 'pending' });
 
+    if (!pendingOrders) {
+      return res.status(404).json({
+        success: false,
+        message: 'No pending orders found',
+      });
+    }
 
+    res.status(200).json({ success: true, pendingOrders });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false, message: 'Error retrieving pending orders' });
+  }
+});
 
+router.get('/api/recent-orders', async (req, res) => {
+  try {
+    // Calculate the date one week ago
+    const oneWeekAgo = moment().subtract(1, 'week').toDate();
+
+    // Find all carts with order_status set to 'pending' and creation date within the past week
+    const recentOrders = await Cart.find({ 
+      order_status: 'pending',
+      created_at: { $gte: oneWeekAgo } // Filter orders created within the past week
+    });
+
+    if (!recentOrders || recentOrders.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: 'No recent orders found within the past week',
+      });
+    }
+
+    res.status(200).json({ success: true, recentOrders });
+  } catch (error) {
+    console.error('Error retrieving recent orders:', error);
+    res.status(500).json({ success: false, message: 'Error retrieving recent orders' });
+  }
+});
 
 router.get('/api/get-subtotal', authJwt.verifyToken, async (req, res) => {
     try {
@@ -307,7 +342,7 @@ router.get('/api/get-subtotal', authJwt.verifyToken, async (req, res) => {
     try {
       const userId = req.user_id;
       const cartItemId = req.params.id;
-      const { cartQuantity, order_status } = req.body;
+      const { cartQuantity} = req.body;
 
       console.log("object====>>>",userId );
       console.log("object",cartItemId );
@@ -325,7 +360,7 @@ router.get('/api/get-subtotal', authJwt.verifyToken, async (req, res) => {
       // Update cart quantity and recalculate subtotal
       cartItem.cartQuantity = cartQuantity;
       cartItem.subtotal = cartQuantity * cartItem.price;
-      cartItem.order_status = order_status || cartItem.order_status;
+      // cartItem.order_status = order_status || cartItem.order_status;
 
   
       // Save the updated cart item

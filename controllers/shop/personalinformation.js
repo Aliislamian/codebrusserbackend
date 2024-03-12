@@ -80,6 +80,7 @@ exports.shoppost = async (req, res) => {
 exports.shopGet = async (req, res) => {
     try {
         const users = await Shop.find();
+        const userCount = users.length; // Get the count of users
         if(!users){
             res.send({
                 success : false,
@@ -88,8 +89,7 @@ exports.shopGet = async (req, res) => {
                })
         }
 
-
-        res.status(200).json({ users });
+        res.status(200).json({userCount, users });
       } catch (error) {
         console.log(error);
         res.status(500).json({ message: 'Error retrieving vendors' });
