@@ -39,6 +39,7 @@ const Imagesshop = require('./routes/shop/image');
 const Cart = require('./routes/cart');
 const message = require('./routes/message');
 const Review = require('./routes/review');
+const Vendor = require('./routes/vendor');
 
 
 app.use(User);
@@ -52,6 +53,7 @@ app.use(Imagesshop);
 app.use(Cart);
 app.use(message);
 app.use(Review);
+app.use(Vendor);
 
   app.get("/", (req, res) => {
     console.log("Testing");
